@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 ## @package gmapcatcher.mapConst
 # Place to keep all constants
+# EDIT: 2015 Marco Draeger
+#       added constant for ArcGIS cache export
 
 import os
 import locale
@@ -111,8 +113,9 @@ REPOS_TYPE_FILES = 0
 REPOS_TYPE_SQLITE3 = 1
 REPOS_TYPE_MGMAPS = 2
 REPOS_TYPE_OSM = 3
-REPOS_TYPE_RMAPS = 4
-REPOS_TYPE = ["Files", "SQLite3", "MGMaps", "OSM", "RMaps"]
+REPOS_TYPE_ARCGISEXPLODE = 4
+REPOS_TYPE_RMAPS = 5
+REPOS_TYPE = ["Files", "SQLite3", "MGMaps", "OSM", "ArcGIS explode", "RMaps"]
 DEFAULT_REPOS_TYPE = 0
 SQLITE3_REPOSITORY_FILE = "tilerepository.db"
 RMAPS_REPOSITORY_FILE_FORMAT = "tile-%s.sqlitedb"

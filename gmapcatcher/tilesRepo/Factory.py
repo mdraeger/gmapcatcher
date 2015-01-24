@@ -1,11 +1,15 @@
 # -*- coding: utf-8 -*-
 ## @package gmapcatcher.tilesRepo.Factory
 # Place to set the correct repository
+# EDIT: 2015 Marco Draeger
+#       extended method 'create_repos_inst' for ArcGIS cache export
+#
 
 import tilesRepoFS
 import tilesRepoMGMaps
 import tilesRepoSQLite3
 import tilesRepoOSM
+import tilesRepoArcGISExplode
 import tilesRepoRMaps
 from gmapcatcher.mapConst import *
 
@@ -59,6 +63,11 @@ def create_repos_inst(mapservice, conf):
 
     elif conf.repository_type == REPOS_TYPE_OSM:
         return tilesRepoOSM.TilesRepositoryOSM(mapservice, conf)
+
+    elif conf.repository_type == REPOS_TYPE_ARCGISEXPLODE:
+        return tilesRepoArcGISExplode.TilesRepositoryArcGISExplode(
+                    mapservice, conf
+               )
 
     elif conf.repository_type == REPOS_TYPE_RMAPS:
         return tilesRepoRMaps.TilesRepositoryRMaps(mapservice, conf)
