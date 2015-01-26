@@ -54,7 +54,7 @@ class TilesRepositoryArcGISExplode(TilesRepository):
         self.writeConfXML(os.path.join(path, 'conf.xml'))
 
     def writeConfCDI(self, filename, xmin, ymin, xmax, ymax):
-        domString = '<EnvelopeN><XMin>%.6f</XMin><YMin>%.6f</YMin><XMax>%.6f</XMax><YMax>%.6f</YMax></EnvelopeN>' % (xmin, ymin, xmax, ymax)
+        domString = """<EnvelopeN xsi:type='typens:EnvelopeN' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:xs='http://www.w3.org/2001/XMLSchema' xmlns:typens='http://www.esri.com/schemas/ArcGIS/10.1'><XMin>%.6f</XMin><YMin>%.6f</YMin><XMax>%.6f</XMax><YMax>%.6f</YMax></EnvelopeN>""" % (xmin, ymin, xmax, ymax)
         dom = xml.dom.minidom.parseString(domString)
         f = open(filename, 'wb')
         dom.writexml(f)
