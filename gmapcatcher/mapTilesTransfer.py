@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
-## @package gmapcatcher.mapTilesTranswer
-# Transwer tiles from respo 1 to repos 2
-
+## @package gmapcatcher.mapTilesTransfer
+# Transfer tiles from repos 1 to repos 2
+# EDIT: 2015 Marco Draeger
+#       Added distinction for ArcGISExploded Repo to provide information for layer
 
 import threading
 import time
@@ -9,6 +10,7 @@ import gobject
 
 import mapUtils
 from tilesRepo.tilesRepo import TilesRepository
+from tilesRepo.tilesRepoArcGISExplode import TilesRepositoryArcGISExplode
 
 
 class InvalidInputParametersError(Exception):
@@ -53,8 +55,8 @@ class TilesTransfer(threading.Thread):
         if self.zoom_max < self.zoom_min:
             raise InvalidInputParametersError("Zoom max (%d) is less than zoom min (%d)." % (self.zoom_max, self.zoom_min))
 
-    def get_tiles_range_for_zoom(self, zoom):
-        # get tiles - copied from mapDownloader
+    def dlon_dlat(self):
+        # calculate the height and widt of the exported region
         dlon = mapUtils.km_to_lon(mapUtils.nice_round(self.reg_width), self.center_lat)
         dlat = mapUtils.km_to_lat(mapUtils.nice_round(self.reg_height))
 
@@ -62,6 +64,13 @@ class TilesTransfer(threading.Thread):
             dlat = 170
         if dlon > 358:
             dlon = 358
+
+        return (dlon, dlat)
+
+    def get_tiles_range_for_zoom(self, zoom):
+        # get tiles - copied from mapDownloader
+
+        (dlon, dlat) = self.dlon_dlat()
 
         top_left = mapUtils.coord_to_tile(
             (self.center_lat + dlat / 2, self.center_lon - dlon / 2, zoom)
@@ -104,6 +113,15 @@ class TilesTransfer(threading.Thread):
 
         if overwrite is true, overwrite existing tiles in destination repository
         """
+
+        if (isinstance (self.trepos_destination, TilesRepositoryArcGISExplode)):
+            (dlon, dlat) = self.dlon_dlat()
+            xmin = self.center_lon - dlon/2
+            ymin = self.center_lat - dlat/2
+            xmax = self.center_lon + dlon/2
+            ymax = self.center_lat + dlat/2
+
+            self.trepos_destination.writeConfig(xmin, ymin, xmax, ymax, self.layer)
 
         gobject.idle_add(self.callback_update, "Computing tiles...")
         num_all_tiles = self.count_all_tiles()

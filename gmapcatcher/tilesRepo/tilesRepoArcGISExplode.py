@@ -29,6 +29,7 @@ import os
 import gmapcatcher.lrucache as lrucache
 import gmapcatcher.fileUtils as fileUtils
 import gmapcatcher.widgets.mapPixbuf as mapPixbuf
+import xml.dom.minidom
 
 from threading import Lock
 from gmapcatcher.mapConst import *
@@ -45,6 +46,31 @@ class TilesRepositoryArcGISExplode(TilesRepository):
         self.mapServ_inst = MapServ_inst
         self.lock = Lock()
         self.missingPixbuf = mapPixbuf.missing()
+
+    def writeConfig(self, xmin, ymin, xmax, ymax, layer):
+        path = os.path.join(self.configpath, "ArcGIS_" + LAYER_DIRS[layer])
+        path = fileUtils.check_dir(path)
+        self.writeConfCDI(os.path.join(path, 'conf.cdi'), xmin, ymin, xmax, ymax)
+        self.writeConfXML(os.path.join(path, 'conf.xml'))
+
+    def writeConfCDI(self, filename, xmin, ymin, xmax, ymax):
+        domString = '<EnvelopeN><XMin>%.6f</XMin><YMin>%.6f</YMin><XMax>%.6f</XMax><YMax>%.6f</YMax></EnvelopeN>' % (xmin, ymin, xmax, ymax)
+        dom = xml.dom.minidom.parseString(domString)
+        f = open(filename, 'wb')
+        dom.writexml(f)
+        f.close()
+
+    def writeConfXML(self, filename):
+        domString = """<CacheInfo xmlns:typens="http://www.esri.com/schemas/ArcGIS/10.1" xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+                                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="typens:CacheInfo">
+                          <TileImageInfo xsi:type="typens:TileImageInfo">
+                             <CacheTileFormat>PNG</CacheTileFormat>
+                          </TileImageInfo>
+                       </CacheInfo>"""
+        dom = xml.dom.minidom.parseString(domString)
+        f = open(filename, 'wb')
+        dom.writexml(f)
+        f.close()
 
     def finish(self):
         # last command in finish
