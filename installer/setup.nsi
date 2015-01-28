@@ -1,6 +1,6 @@
 !define PRODUCT_NAME "GMapCatcher"
-!define PRODUCT_VERSION "0.8.0.5"
-!define PRODUCT_WEB_SITE "http://code.google.com/p/gmapcatcher/"
+!define PRODUCT_VERSION "0.8.1.0"
+!define PRODUCT_WEB_SITE "http://github.com/mdraeger/gmapcatcher/"
 !include nsDialogs.nsh
 
 ; The name of the installer
