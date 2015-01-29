@@ -11,7 +11,9 @@ class OurCredits(gtk.AboutDialog):
         # add real names here! :-)
         AUTHORS = ["Nan Wang", "Helder Sepulveda", "Maxim Razin",
                    "Mark Benjamin", "Standa Mitrega", "Johan Strombom",
-                   "Alex Knott", "Kevin Lo", "Becky Thipavong", "Tomas Penicka"]
+                   "Alex Knott", "Kevin Lo", "Becky Thipavong", 
+                   "Tomas Penicka", "Marco Draeger"]
+                   
         DOCUMENTERS = ["Hans Kochsmeier", "F Engelbrecht"]
 
         gtk.AboutDialog.__init__(self)
@@ -21,7 +23,7 @@ class OurCredits(gtk.AboutDialog):
         self.set_authors(AUTHORS)
         self.set_documenters(DOCUMENTERS)
         self.set_program_name(NAME)
-        self.set_copyright("© 2008-2010 the gmapcatcher team")
+        self.set_copyright("© 2008-2015 the gmapcatcher team")
         self.set_license("""                    GNU GENERAL PUBLIC LICENSE
                        Version 2, June 1991
 
